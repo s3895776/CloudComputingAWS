@@ -15,8 +15,8 @@ public class UploadObject {
 
     public static void main(String[] args) throws IOException {
         Regions clientRegion = Regions.US_EAST_1;
-        String bucketName = "*** Bucket name ***";//e.g., sxxxxxxx-s3test
-        String stringObjKeyName = "*** String object key name ***";//e.g., sample.txt
+        String bucketName = "s3895776imagebucket";
+        String stringObjKeyName = "*** String object key name ***";
         String fileObjKeyName = "*** File object key name ***";//This part can be empty
         String fileName = "*** Path to file to upload ***";//e.g., sample.txt
 
@@ -33,7 +33,7 @@ public class UploadObject {
             // Upload a file as a new object with ContentType and title specified.
             PutObjectRequest request = new PutObjectRequest(bucketName, fileObjKeyName, new File(fileName));
             ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType("plain/text");
+            metadata.setContentType("plain/text");	
             metadata.addUserMetadata("title", "someTitle");
             request.setMetadata(metadata);
             s3Client.putObject(request);
@@ -46,6 +46,7 @@ public class UploadObject {
             // couldn't parse the response from Amazon S3.
             e.printStackTrace();
         }
+        
     }
 }
 
