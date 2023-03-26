@@ -1,6 +1,7 @@
 package DatabaseManagement;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class PopulateMusicTable {
@@ -32,9 +34,15 @@ public class PopulateMusicTable {
             JsonParser parser = new JsonFactory().createParser(new File("a1.json"));
             
             JsonNode rootNode = new ObjectMapper().readTree(parser);
-            Iterator<JsonNode> iter = rootNode.iterator();  
-//            JSON file is structured differently so this does not work correctly.
-           
+            
+//			Due to the JSON structure, "songs" is a JSON node that needs to be 
+//          parsed. 
+//          My solution here is to get the "songs" as a JSON node 
+//          and then replicate the step where we get the actual content.
+//          the place holder is for this purpose.             
+            Iterator<JsonNode> placeholder = rootNode.iterator(); 
+            JsonNode songs = placeholder.next();
+            Iterator<JsonNode> iter = songs.iterator();
             
             ObjectNode currentNode;
             
@@ -48,7 +56,7 @@ public class PopulateMusicTable {
                     table.putItem(new Item().withPrimaryKey("year", year, "title", title)
                     		.withJSON("artist", currentNode.path("artist").toString())
                     		.withJSON("web_url", currentNode.path("web_url").toString())
-                    		.withJSON("image_url", currentNode.path("image_url").toString())
+                    		.withJSON("image_url", currentNode.path("img_url").toString())
                     		);
                     System.out.println("PutItem succeeded: " + year + " " + title);
 

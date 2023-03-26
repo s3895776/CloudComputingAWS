@@ -9,27 +9,25 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.Table;
-import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;	
+
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
+import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
+
 
 public class UploadImageBucket {
 
     public static void main(String[] args) throws IOException {
         Regions clientRegion = Regions.US_EAST_1;
-        AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-                .withRegion(clientRegion)
-                .build();
         
         AmazonDynamoDB dynamoClient = AmazonDynamoDBClientBuilder.standard()
                 .withRegion(clientRegion)
@@ -37,12 +35,20 @@ public class UploadImageBucket {
                 .build();
 
         DynamoDB dynamoDB = new DynamoDB(dynamoClient);
-        
-        
 
         Table table = dynamoDB.getTable("music");
         
-        ScanSpec scanSpec = new ScanSpec().withProjectionExpression("#yr, title, image_url");
+        try {
+        	table.waitForActive();
+        }
+        
+        catch (Exception e) {
+        	System.err.println("Unable to create music table: ");
+  	        System.err.println(e.getMessage());
+        }
+        
+        
+        ScanSpec scanSpec = new ScanSpec().withProjectionExpression("title, #yr, image_url");
         
         ArrayList<String> image_urls = new ArrayList<String>();
 
@@ -50,6 +56,10 @@ public class UploadImageBucket {
         try {
         	ItemCollection<ScanOutcome> items = table.scan(scanSpec);
             Iterator<Item> iter = items.iterator();
+            
+//            System.out.println( iter.hasNext() );
+            
+//          
             while (iter.hasNext()) {
             	
                 Item item = iter.next();
@@ -68,12 +78,16 @@ public class UploadImageBucket {
         }
         System.out.println();
         
-//        TODO: iterate image_urls into the s3 bucket. 
+//      AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+//      .withRegion(clientRegion)
+//      .build();
+//        
+////        TODO: iterate image_urls into the s3 bucket. 
 //        String stringObjKeyName = "image_url"; //name in s3
 //        String fileObjKeyName = "";//This part can be empty
 //        String fileName = "*** Path to file to upload ***";//e.g., sample.txt
 //        
-//        for (int i = 0; i < request_num; ++i) {
+//        for (int i = 0; i < 0; ++i) {
 //        	
 //        	String stringObjKeyNameIterate =  "image_url" + i;
 //        	String fileNameIterate = "example_url"; 
@@ -81,7 +95,6 @@ public class UploadImageBucket {
 //        }
 //        
 //        String bucketName = "s3895776imagebucket";
-        
 //        try {
 //            //This code expects that you have AWS credentials set up per:
 //            // https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html
