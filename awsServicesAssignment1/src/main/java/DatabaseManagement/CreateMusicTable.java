@@ -14,6 +14,13 @@ import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 
+/*
+ * CreateMusicTable 
+ * create a dynamoDB table named "music" 
+ * partition key = title
+ * sort key = year 
+ * Will not create other attributes. 
+ * */
 public class CreateMusicTable {
 	public static void main(String[] args) throws Exception {
 		
@@ -24,13 +31,22 @@ public class CreateMusicTable {
 
 	    DynamoDB dynamoDB = new DynamoDB(client);
 	    
-	    String table_name = "music";
+	    
+	    String table_name = constants.MUSIC_TABLE;
+	    
 	    
 	    try {
+	    	String partition_key = constants.PARTITION_KEY_MUSIC;
+	    	String sort_key = constants.SORT_KEY_MUSIC;
+	    	
 	        System.out.println("Attempting to create table; please wait...");
 	        Table table = dynamoDB.createTable(table_name,
-	            Arrays.asList(new KeySchemaElement("title", KeyType.HASH), new KeySchemaElement("year", KeyType.RANGE)),
-	            Arrays.asList(new AttributeDefinition("title", ScalarAttributeType.S), new AttributeDefinition("year", ScalarAttributeType.N)),
+	            Arrays.asList(new KeySchemaElement(partition_key, KeyType.HASH), 
+	            		new KeySchemaElement(sort_key, KeyType.RANGE)
+	            		),
+
+	            Arrays.asList(new AttributeDefinition(partition_key, ScalarAttributeType.S), 
+	            		new AttributeDefinition(sort_key, ScalarAttributeType.N) ),
 	            new ProvisionedThroughput(10L, 10L));
 	        table.waitForActive();
 	        System.out.println("Success.  Table status: " + table.getDescription().getTableStatus());

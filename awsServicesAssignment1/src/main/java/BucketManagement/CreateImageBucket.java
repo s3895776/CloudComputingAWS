@@ -11,10 +11,12 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.GetBucketLocationRequest;
 
+import DatabaseManagement.constants;
+
 public class CreateImageBucket {
     public static void main(String[] args) throws IOException {
         Regions clientRegion = Regions.US_EAST_1;
-        String bucketName = "s3895776imagebucket";
+        String bucketName = constants.BUCKET;
         
         try {
             AmazonS3 s3Client = AmazonS3ClientBuilder.standard()

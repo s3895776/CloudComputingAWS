@@ -1,6 +1,7 @@
 package DatabaseManagement;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -17,7 +18,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
+/*
+ * Populate music table 
+ * populate "music" 
+ * partition key = title
+ * sort key = year 
+ * Will not create other attributes. 
+ * */
 public class PopulateMusicTable {
 
     public static void main(String[] args) throws Exception {
@@ -29,7 +36,7 @@ public class PopulateMusicTable {
 
             DynamoDB dynamoDB = new DynamoDB(client);
 
-            Table table = dynamoDB.getTable("music");
+            Table table = dynamoDB.getTable(constants.MUSIC_TABLE);
            
             JsonParser parser = new JsonFactory().createParser(new File("a1.json"));
             
@@ -49,20 +56,20 @@ public class PopulateMusicTable {
             while (iter.hasNext()) {
                 currentNode = (ObjectNode) iter.next();
                 
-                int year = currentNode.path("year").asInt();
-                String title = currentNode.path("title").asText(); 
+                int partition_key = currentNode.path(constants.PARTITION_KEY_MUSIC).asInt();
+                String sort_key = currentNode.path(constants.SORT_KEY_MUSIC).asText(); 
                 
                 try {
-                    table.putItem(new Item().withPrimaryKey("year", year, "title", title)
-                    		.withJSON("artist", currentNode.path("artist").toString())
-                    		.withJSON("web_url", currentNode.path("web_url").toString())
-                    		.withJSON("image_url", currentNode.path("img_url").toString())
+                    table.putItem(new Item().withPrimaryKey(constants.PARTITION_KEY_MUSIC, partition_key, constants.SORT_KEY_MUSIC, sort_key)
+                    		.withJSON(constants.ARTIST, currentNode.path(constants.ARTIST).toString())
+                    		.withJSON(constants.WEB_URL, currentNode.path(constants.WEB_URL).toString())
+                    		.withJSON(constants.IMG_URL, currentNode.path(constants.IMG_URL).toString())
                     		);
-                    System.out.println("PutItem succeeded: " + year + " " + title);
+                    System.out.println("PutItem succeeded: " + partition_key + " " + sort_key);
 
                 }
                 catch (Exception e) {
-                    System.err.println("Unable to add movie: " + year + " " + title);
+                    System.err.println("Unable to add movie: " + partition_key + " " + sort_key);
                     System.err.println(e.getMessage());
                     break;
                 }

@@ -15,10 +15,16 @@ public class UploadObject {
 
     public static void main(String[] args) throws IOException {
         Regions clientRegion = Regions.US_EAST_1;
-        String bucketName = "s3895776imagebucket";
-        String stringObjKeyName = "*** String object key name ***";
-        String fileObjKeyName = "*** File object key name ***";//This part can be empty
-        String fileName = "*** Path to file to upload ***";//e.g., sample.txt
+        
+//        example from tutorial
+//        copied-string.txt is the name of the object in the bucket
+//        the file is the thing you want to put in the object.
+//        use file name to find it. 
+//        put file in the root project directory. 
+        String bucketName = "s3895776-s3test";
+        String stringObjKeyName = "copied-string.txt";
+        String fileObjKeyName = "copied-string.txt"; 
+        String fileName = "sample.txt";
 
         try {
             //This code expects that you have AWS credentials set up per:
