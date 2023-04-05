@@ -30,8 +30,8 @@ public class CreateLoginTable {
 	        try {
 	            System.out.println("Attempting to create table; please wait...");
 	            Table table = dynamoDB.createTable(tableName,
-	                Arrays.asList(new KeySchemaElement("email", KeyType.HASH), new KeySchemaElement("username", KeyType.RANGE)),
-	                Arrays.asList(new AttributeDefinition("email", ScalarAttributeType.S), new AttributeDefinition("username", ScalarAttributeType.S)),
+	                Arrays.asList(new KeySchemaElement("email", KeyType.HASH)),
+	                Arrays.asList(new AttributeDefinition("email", ScalarAttributeType.S)),
 	                new ProvisionedThroughput(10L, 10L));
 	            table.waitForActive();
 	            System.out.println("Success.  Table status: " + table.getDescription().getTableStatus());

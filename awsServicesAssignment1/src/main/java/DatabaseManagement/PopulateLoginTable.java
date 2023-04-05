@@ -44,8 +44,9 @@ public class PopulateLoginTable {
 			
 			for (int i = 0; i < 10; ++i) {
 				
-				Item item = new Item().withPrimaryKey("email", emails.get(i),"username", usernames.get(i))
-						.withString("password", passwords.get(i));				
+				Item item = new Item().withPrimaryKey("email", emails.get(i))
+						.withString("password", passwords.get(i))
+						.withString("username", usernames.get(i) );				
 				System.out.println("Adding a new item...");
 				PutItemOutcome outcome = table.putItem(item);
 				System.out.println("PutItem succeeded:\n" + outcome.getPutItemResult());
