@@ -126,9 +126,6 @@ def login_post():
 def main_page(username):
     return render_template("main.html", username = username)
 
-
-
-
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This

@@ -49,3 +49,12 @@ def check_email(loginTable, email):
     )
     return response
     
+def music_get(music_table, partition_key, sort_key):
+    response = music_table.get_item(
+       Key = {
+           'Pkey': partition_key,
+            'Skey': sort_key
+       },
+       AttributesToGet = ['title', 'artist', "year"]
+   )
+    return response
