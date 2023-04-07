@@ -29,7 +29,7 @@ def root():
 
 @app.route('/', methods=['POST'])
 def login_post():
-    loginTable = dynamodb.create_table()
+    loginTable = dynamodb.create_login_table()
     email = request.form['email']
     password = request.form['password']
     
@@ -72,7 +72,7 @@ def register_page():
 
 @app.route('/register/attempt', methods = ["POST"])
 def registering():
-    loginTable = dynamodb.create_table()
+    loginTable = dynamodb.create_login_table()
     
     email = request.form['email']
 
@@ -144,9 +144,57 @@ def logout():
 @app.route("/main/query", methods = ["POST"])
 def query():
     title = request.form['title']
-    year = request.form['year']
     artist = request.form['artist']
+    year = request.form['year']
 
+    music_table = dynamodb.create_music_table()
+    music_scan = dynamodb.scan_music(music_table, title, artist, year)
+
+    if (music_scan == "empty"):
+        return render_template("main.html")
+
+    print(music_scan)
+    if (music_scan['ResponseMetadata']['HTTPStatusCode'] == 200):
+
+        if ('Items' in music_scan):
+
+            items = music_scan['Items']
+
+            if len(items) == 0:
+                # “No result is retrieved. Please query again”.
+                return render_template("main.html", empty = True)
+
+            
+            else:
+                titles = list()
+                artists = list()
+                years = list()
+                for item in items:
+                    titles.append(item['title'])
+                    artists.append(item['artist'])
+                    years.append(item['year'])
+                
+                # put the titles, artists, and years.
+                return render_template("main.html", empty = False, titles = titles, artists = artists, years = years, notsent = False)
+
+
+
+
+        else:
+            return {
+                "msg": "error",
+                "response": music_scan['ResponseMetadata']['HTTPStatusCode']
+            }
+        
+    return {
+        "msg": "error",
+        "response": music_scan['ResponseMetadata']['HTTPStatusCode']
+    }  
+
+    # if (music_scan == "no result"):
+    #     return render_template("main.html")
+    
+   
 
 
 if __name__ == '__main__':

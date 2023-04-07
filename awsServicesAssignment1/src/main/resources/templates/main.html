@@ -14,20 +14,41 @@
     <!-- TODO: query area -->
 
 
-    <form id = "query", method = "post", action = "{{url_for('query')}}"> 
+    <form id = "query", method = "post", action = "{{ url_for('query') }}"> 
         
         <label>title:</label>
             <input type = "text" name ="title", id = "title">
-        <label>year:</label>
-            <input type = "text" name ="year", id = "year">
         <label>artist:</label>
             <input type = "text" name ="artist", id = "artist">
-
+        <label>year:</label>
+            <input type = "number" name ="year", id = "year">
         <button type = 'submit'> Query </button>
 
     </form>   
     
+    {% if empty %}
+        <p> No result is retrieved. Please query again. </p>
+    {% endif %}
+        
+    {% if notSent == False %}
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Year</th>
+        {% for i in range(len(titles)) %}
+        <tr>
+            <td> {{titles[i]}} </td> 
+            <td> {{artists[i]}} </td> 
+            <td> {{years[i]}} </td> 
+        
+        </tr>
 
+        {% endfor %}
+
+    </table>
+          
+    {% endif %}
     <!-- log out link  -->
 
     <form id = "logout", method = "get", action = "{{ url_for('logout') }}"> 

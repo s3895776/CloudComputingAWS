@@ -63,7 +63,7 @@ public class PopulateMusicTable {
                 try {
                     // System.out.println(currentNode.path(constants.ARTIST).toString()); 
                     table.putItem(new Item().withPrimaryKey(constants.PARTITION_KEY_MUSIC, partition_key, constants.SORT_KEY_MUSIC, sort_key)
-                    		.withJSON(constants.YEAR, currentNode.path(constants.YEAR).toString())
+                    		.withInt(constants.YEAR, currentNode.path(constants.YEAR).asInt())
                     		.withJSON(constants.WEB_URL, currentNode.path(constants.WEB_URL).toString())
                     		.withJSON(constants.IMG_URL, currentNode.path(constants.IMG_URL).toString())
                     		);
