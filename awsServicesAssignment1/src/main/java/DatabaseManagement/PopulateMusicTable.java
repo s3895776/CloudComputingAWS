@@ -18,12 +18,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import constants.constants;
 /*
  * Populate music table 
  * populate "music" 
  * partition key = title
  * sort key = year 
- * Will not create other attributes. 
  * */
 public class PopulateMusicTable {
 

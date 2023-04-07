@@ -14,6 +14,8 @@ import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 
+import constants.constants;
+
 /*
  * CreateMusicTable 
  * create a dynamoDB table named "music" 

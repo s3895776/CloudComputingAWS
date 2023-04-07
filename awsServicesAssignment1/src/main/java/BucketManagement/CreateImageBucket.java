@@ -11,7 +11,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.GetBucketLocationRequest;
 
-import DatabaseManagement.constants;
+import constants.constants;
 
 public class CreateImageBucket {
     public static void main(String[] args) throws IOException {

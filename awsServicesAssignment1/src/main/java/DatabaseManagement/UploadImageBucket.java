@@ -22,6 +22,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
+import constants.constants;
+
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
@@ -32,7 +34,12 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
 import com.amazonaws.services.dynamodbv2.document.utils.NameMap;
 
-
+/* 
+ * get urls from a1.json 
+ * parse the img_url 
+ * download images 
+ * upload images
+*/
 public class UploadImageBucket {
 
     public static void main(String[] args) throws Exception {
@@ -56,7 +63,6 @@ public class UploadImageBucket {
   	        System.err.println(e.getMessage());
         }
         
-//        use img_url 
         ScanSpec scanSpec = new ScanSpec().withProjectionExpression("title, #yr, img_url")
         		.withNameMap(new NameMap().with("#yr", "year"));
         
@@ -76,7 +82,7 @@ public class UploadImageBucket {
         }
         
         catch (Exception e) {
-            System.err.println("Unable to scan the table:");
+            System.err.println("Unable to obtain all image urls:");
             System.err.println(e.getMessage());
         }
         
@@ -86,7 +92,7 @@ public class UploadImageBucket {
         URL url;
         BufferedImage image;
         
-//        create and write to image files. 
+//        create and download image files. 
         try {
         	for (int i = 0; i < NUM_IMAGE_URLS; ++i ) {
         		url = new URL( image_urls.get(i).getString(constants.IMG_URL) );
@@ -98,7 +104,8 @@ public class UploadImageBucket {
         	}
         	
         } catch (IOException e) {
-            // handle IOException
+            System.err.println("Unable to download all images:");
+            System.err.println(e.getMessage());
         }
 
         ArrayList<String> imageFiles = new ArrayList<String>();
@@ -106,12 +113,10 @@ public class UploadImageBucket {
         for (int i = 0; i < image_urls.size(); ++i) {
         	imageFiles.add("img_folder\\image" + i + ".png"); 
         }
-        
-        String stringObjKeyName = constants.IMG_URL; //name in s3
-        String fileObjKeyName = "";//This part can be empty   
+    
+        String fileObjKeyName = "";
         
 
-//      TODO: iterate img_url into the s3 bucket. 
         String bucketName = constants.BUCKET;
         try {
             //This code expects that you have AWS credentials set up per:
@@ -122,7 +127,6 @@ public class UploadImageBucket {
             .build();
             
         	for (int i = 0; i < image_urls.size(); ++i) {
-            	
 
         		fileObjKeyName = constants.IMG_URL + i;
         		

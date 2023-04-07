@@ -1,4 +1,5 @@
-package DatabaseManagement;
+package constants;
+
 
 public final class constants {
 	public static final String MUSIC_TABLE = "music";
