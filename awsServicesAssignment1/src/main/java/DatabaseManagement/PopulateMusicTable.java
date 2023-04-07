@@ -46,7 +46,7 @@ public class PopulateMusicTable {
 //			Due to the JSON structure, "songs" is a JSON node that needs to be 
 //          parsed. 
 //          My solution here is to get the "songs" as a JSON node 
-//          and then replicate the step where we get the actual content.
+//          iterate the JSON node to get another JSON node with the actual content.
 //          the place holder is for this purpose.             
             Iterator<JsonNode> placeholder = rootNode.iterator(); 
             JsonNode songs = placeholder.next();
@@ -57,12 +57,13 @@ public class PopulateMusicTable {
             while (iter.hasNext()) {
                 currentNode = (ObjectNode) iter.next();
                 
-                int partition_key = currentNode.path(constants.PARTITION_KEY_MUSIC).asInt();
+                String partition_key = currentNode.path(constants.PARTITION_KEY_MUSIC).asText();
                 String sort_key = currentNode.path(constants.SORT_KEY_MUSIC).asText(); 
                 
                 try {
+                    // System.out.println(currentNode.path(constants.ARTIST).toString()); 
                     table.putItem(new Item().withPrimaryKey(constants.PARTITION_KEY_MUSIC, partition_key, constants.SORT_KEY_MUSIC, sort_key)
-                    		.withJSON(constants.ARTIST, currentNode.path(constants.ARTIST).toString())
+                    		.withJSON(constants.YEAR, currentNode.path(constants.YEAR).toString())
                     		.withJSON(constants.WEB_URL, currentNode.path(constants.WEB_URL).toString())
                     		.withJSON(constants.IMG_URL, currentNode.path(constants.IMG_URL).toString())
                     		);

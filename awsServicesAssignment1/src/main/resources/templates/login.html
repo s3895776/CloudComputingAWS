@@ -8,7 +8,7 @@
     <body>
         <h2> Cloud computing A1 Login page </h2>
             
-        <form id = "Login_form", method = "post", action = "/"> 
+        <form id = "Login_form", method = "post", action = "{{ url_for('root') }}"> 
             
             <label>Email:</label>
             <input type = "text" name ="email", id = "email">
@@ -18,26 +18,23 @@
 			<input type="password" name="password", id = "password">
 
             <button type = 'submit'>Login</button>
-            
-            <!-- until password is passed, do not show -->
+            <!-- State 1: brings you to the success page (success)-->
+
+        </form>
+            <!-- State 2: tells you "email or password is invalid"-->
+
             {% if submit == True %}
                 {% if invalid == True %}
-                <!-- TODO: State 1: brings you to the success page (success)-->
                     <p>email or password is invalid</p>
                     
                 {% else %}
-                <!-- TODO: State 2: tells you "email or password is invalid"-->
                 {% endif %}
             {% endif %}
             
-        </form>
-
-        <form id = "Register_link", method = "post", action = "/register">
+        <form id = "Register_link", method = "post", action = "{{ url_for('register_page') }}">
             <button type = "submit"> Register</button>
         </form>
             
-
-            <!-- TODO: link the page for registration -->
 
     </body>
 

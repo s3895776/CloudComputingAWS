@@ -48,7 +48,7 @@ public class CreateMusicTable {
 	            		),
 
 	            Arrays.asList(new AttributeDefinition(partition_key, ScalarAttributeType.S), 
-	            		new AttributeDefinition(sort_key, ScalarAttributeType.N) ),
+	            		new AttributeDefinition(sort_key, ScalarAttributeType.S) ),
 	            new ProvisionedThroughput(10L, 10L));
 	        table.waitForActive();
 	        System.out.println("Success.  Table status: " + table.getDescription().getTableStatus());

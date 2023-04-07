@@ -8,18 +8,13 @@
 
     <body>
 
+        <form id = "return_login", method = "get", action = "{{ url_for('root') }}"> 
 
-        <!-- TODO: link login page with registration -->
-        
-        <div class = "container">
-            
-            <button>Return to Login</button>
-            <!-- TODO: click button call the reference to return -->
+            <button type = 'submit'>Return to Login</button>
 
-        </div>
-        
+        </form>        
 
-        <form id = "Register_form", method = "post", action = "/register/attempt"> 
+        <form id = "Register_form", method = "post", action = "{{ url_for('registering') }}"> 
 
 
             <label>Email:</label>
@@ -34,11 +29,10 @@
             <button type = 'submit'>Register</button>
             
             <!-- TODO: state1: success, return to login -->
-          
+        
+        </form>
             <!-- TODO: state2: failure, "The email already exists" if registration is the same -->
 
-
-        </form>
             {% if submit   %}
 
                 {% if registered   %}

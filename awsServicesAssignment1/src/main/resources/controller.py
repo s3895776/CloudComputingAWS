@@ -1,10 +1,10 @@
 from boto3 import resource
 import config
 
-AWS_ACCESS_KEY_ID = config.AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY = config.AWS_SECRET_ACCESS_KEY
-REGION_NAME = config.REGION_NAME
-AWS_SESSION_TOKEN = config.AWS_SESSION_TOKEN
+AWS_ACCESS_KEY_ID = config.aws_access_key_id
+AWS_SECRET_ACCESS_KEY = config.aws_secret_access_key
+REGION_NAME = "us-east-1"
+AWS_SESSION_TOKEN = config.aws_session_token
 
 
 

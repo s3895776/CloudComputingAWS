@@ -16,7 +16,7 @@
 # [START gae_python3_render_template]
 import datetime
 
-from flask import Flask, render_template, request, redirect
+from flask import Flask, make_response, render_template, request, redirect
 import controller as dynamodb
 
 app = Flask(__name__)
@@ -27,7 +27,46 @@ def root():
     # receive post request 
     return render_template('login.html', submit = False)
 
+@app.route('/', methods=['POST'])
+def login_post():
+    loginTable = dynamodb.create_table()
+    email = request.form['email']
+    password = request.form['password']
+    
+    if (email == ""):
+        return render_template('login.html', invalid = True, submit = True)
+    
+    # Add your authentication logic here
+    response = dynamodb.read_login(loginTable, email)
+    if (response['ResponseMetadata']['HTTPStatusCode'] == 200):
+
+        if ('Item' in response):
+
+            if ('password' in response['Item']):
+            # validate password
+                if (response['Item']['password'] == password ):
+                       
+                    user = response['Item']['username']
+                    resp = make_response(redirect('main'))
+                    resp.set_cookie('userID', user)
+                    return resp
+                
+                else:
+                    return render_template('login.html', invalid = True, submit = True)
+            else:
+                return "should not reach here"
+
+        else:
+            return render_template('login.html', invalid = True, submit = True)
+        
+    return {
+        "msg": "error",
+        "response": response['ResponseMetadata']['HTTPStatusCode']
+    }  
+
 @app.route('/register', methods = ["GET", "POST"])
+
+
 def register_page():
     return render_template("register.html", submit = False)
 
@@ -86,45 +125,29 @@ def registering():
         }  
 
 
-@app.route('/', methods=['POST'])
-def login_post():
-    loginTable = dynamodb.create_table()
-    email = request.form['email']
-    password = request.form['password']
+@app.route('/main')
+def main_page():
     
-    if (email == ""):
-        return render_template('login.html', invalid = True, submit = True)
-    
-    # Add your authentication logic here
-    response = dynamodb.read_login(loginTable, email)
-    if (response['ResponseMetadata']['HTTPStatusCode'] == 200):
+    username = request.cookies.get('userID')
 
-        if ('Item' in response):
+    if username is None: 
+        return redirect("/")
 
-            if ('password' in response['Item']):
-            # validate password
-                if (response['Item']['password'] == password ):
-                    
-                    # this posts a get request. 
-                    return redirect('main' + "/" + response['Item']['username'] + "" )
-                
-                
-                else:
-                    return render_template('login.html', invalid = True, submit = True)
-            else:
-                return "should not reach here"
-
-        else:
-            return render_template('login.html', invalid = True, submit = True)
-        
-    return {
-        "msg": "error",
-        "response": response['ResponseMetadata']['HTTPStatusCode']
-    }  
-
-@app.route('/main/<username>')
-def main_page(username):
     return render_template("main.html", username = username)
+
+@app.route("/logout")
+def logout():
+    resp = make_response(redirect("/"))
+    resp.set_cookie('userID', '', expires=0)
+    return resp
+
+@app.route("/main/query", methods = ["POST"])
+def query():
+    title = request.form['title']
+    year = request.form['year']
+    artist = request.form['artist']
+
+
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
