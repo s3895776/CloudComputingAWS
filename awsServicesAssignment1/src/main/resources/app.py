@@ -150,8 +150,10 @@ def query():
     music_table = dynamodb.create_music_table()
     music_scan = dynamodb.scan_music(music_table, title, artist, year)
 
+    username = request.cookies.get('userID')
+
     if (music_scan == "empty"):
-        return render_template("main.html")
+        return render_template("main.html", username= username)
 
     print(music_scan)
     if (music_scan['ResponseMetadata']['HTTPStatusCode'] == 200):
@@ -162,7 +164,7 @@ def query():
 
             if len(items) == 0:
                 # “No result is retrieved. Please query again”.
-                return render_template("main.html", empty = True)
+                return render_template("main.html", empty = True, username=username)
 
             
             else:
@@ -175,7 +177,8 @@ def query():
                     years.append(item['year'])
                 
                 # put the titles, artists, and years.
-                return render_template("main.html", empty = False, titles = titles, artists = artists, years = years, notsent = False)
+                return render_template("main.html", empty = False, titles = titles,
+                                        artists = artists, years = years, notsent = False, username=username)
 
 
 

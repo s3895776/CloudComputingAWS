@@ -1,4 +1,4 @@
-package DatabaseManagement;
+package BucketManagement;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;

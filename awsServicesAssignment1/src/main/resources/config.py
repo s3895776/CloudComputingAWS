@@ -1,3 +1,3 @@
-aws_access_key_id=""
-aws_secret_access_key=""
-aws_session_token=""
+aws_access_key_id="ASIASZYP5ZUICYJK3WEN"
+aws_secret_access_key="nKahQgaUPaF25/UT1nwGUDUPMf2RKgjbjd5BYg2N"
+aws_session_token="FwoGZXIvYXdzEMH//////////wEaDDaMwGD+zSURPzIUXiLNAUPJY3uFfpn/XOpHg+hH/P+sD7TNnli/6HKY60V5xC7DoUykYCCHIs1rii90sKVXfcmLb0QJBXdJrz8LtIPYNn0iOzQ05QrnLnsAzlvFJ7cuaUvTbyLr0yHNq7rjpNIjQSn8s8QpDnG7bv2PPuBp7MgYJ93pSdo6XSIfYMYuAp5YJ058xloRK3Q6u8SuqnLvclDd2mPoESx9LDa8z47SDvRSCdX5DXOb982FTpr+utWqS3bK+u4cY1TRx99toY2SdgSGBfKIO2Yqb1xLRJYonbHSoQYyLTUcRdz7UcXzgDQKrQNeQz5O4vZH1w0bzRD+3rmo2ye+20gL9K46STerRFGJDg=="
